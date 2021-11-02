@@ -1,0 +1,16 @@
+nc 3 number of colors
+ndens 0.243	density of scatterers in [GeV^3]
+emax 100 light cone energy p_+ of initial jet particle in [GeV]
+qhat 1. average transverse momentum transfer in [GeV^2/fm]
+tmin 0. start time of jet evolution in [fm]
+tmax .1 end time of jet evolution in [fm]
+alphas 0.31415926 coupling constant
+scat 2 type of scattering: 0 for no scattering, 1 for ~ q^(-4) potential, 2 and 3 for ~ 1/q^2(q^2+m_D^2) potential 
+ktsplit 1 collinear/non-collinear splitting: 0 for collinear, 1 for non-collinear splitting
+x1 1 momentum fraction of initial particle
+typ1 1 type of initial particle: 1 for quarks, 2 for gluons
+kt1 0 momentum component orthogonal to jet axis of initial particle in [GeV]
+xmin 0.0001 cut-off for energy fraction x
+xeps 0.0001 epsilon
+qmin 0.1 cut-off for transverse momentum in [GeV]
+md 0.993 Debye mass

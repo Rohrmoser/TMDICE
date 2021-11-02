@@ -1,0 +1,27 @@
+Installation and execution instruction for the demo-code of TMDICE
+
+In this instruction of how to compile and run the demo-code, it is assumed that the user uses a LINUX based operating system 
+on which there is a g++ compiler of the GNU compiler collection installed that allows to compile at leas C++ code of the C++11 standard of the 
+language (or from a more recent standard of the C++ language).
+For other operating systems and compilers it cannot be guaranteed that the execution of this demo-code works.
+However, it should still be possible to compile and run programs that use TMDICE and compile and run the file demo.cpp, together 
+with the other TMDICE files, provided a C++ compiler that allows to compile C++ code written in the C++11 standard is installed 
+on the operating system. 
+
+To compile and run the demo code, replace in the following line <path> with the path to and <directory> with the name of a directory 
+in which the demo should be created and type the resulting line in a terminal window, then press enter:
+
+bash make_demo.sh <path>/<directory>
+
+With the same replacements as before type then also the following line in the terminal window and press enter:
+
+cd <path>/<directory> ; bash makefile.sh
+
+The code should now be successfully compiled.
+If the compilation did not work, verify that the installed version of the g++ compiler allows to compile C++ code written in the C++11 
+standard of the language.
+
+To run the successfully compiled demo-code, use again the same replacements as before on the following line 
+and in addition replace <outputfile> with a filename of your choice and type the resulting line in a terminal window, then press enter:
+
+<path>/<directory>/demo.out <outputfile>
