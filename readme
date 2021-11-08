@@ -1,4 +1,53 @@
-Installation and execution instruction for the demo-code of TMDICE
+Instructions for the usage of the TMDICE program:
+
+Table of Contents:
+1) Files contained in the TMDICE package and their brief description
+2) Brief guide to installation and usage of TMDICE
+3) Installation and execution instruction for the demo-code of TMDICE
+
+1) Files contained in the TMDICE package and their brief description
+
+The TMDICE package, once unzipped contains a single folder with all files of the program within that very folder.
+These files are:
+TMDICE.cpp ...the main file of the TMDICE program containing the functions for setting the parameters, calculating the partition functions, and 
+              performing the Monte-Carlo selection of the cascades
+TMDICE.h ...the corresponding header file, with description of the class "TMDICEevent"
+TMDICE_lib.cpp ...contains some routines necessary for calculating the partition functions and selection from these partition functions 
+                  in "TMDICE.cpp", as well as some physical constants.
+TMDICE_lib.h ...the corresponding header file
+TMDICE_lib.tpp ...contains a routine that allows numerical integration following the Gauss-Chebyshev method
+deps.h ...contains all the C++ libraries that need to be loaded in "TMDICE.cpp", and "TMDICE_lib.cpp"
+demo.cpp ...an example code that uses TMDICE to generate a set of parton cascades from an initial particle
+inputfile ...an input-file containing the parameters necessary to execute "demo.cpp"
+make_demo.sh ...Makefile for the program given by "demo.cpp"
+testfile ... some sample output obtained from a run of "demo.cpp"
+evaluation_demo.nb ...a Mathematica-file that produces plots from the outputs obtained by runs of "demo.cpp"
+readme ...this readme file
+
+2) Brief guide to installation and usage of TMDICE
+
+2.1) Installation
+In order to be able to execute the code or include it as a library into a C++ program this .zip file needs to be expanded (via unzip) into a folder, 
+which from now on will be referenced as $TMDICEfolder.
+
+2.2) Usage
+In order to be able to compile C++ code that uses TMDICE, the following steps need to be done:
+To include TMDICE, into a C++ program it is necessary to include the line 
+
+#include "TMDICE.h"
+
+at the beginning of the main file of the program,
+to compile the programs with reference to source files and location of the library files, which in the g++ compiler of the GNU-compiler collection
+ will look like this:
+ 
+g++ -std=c++11 <main> $TMDICEfolder/TMDICE.cpp $TMDICEfolder/TMDICE_lib.cpp -I$TMDICEfolder <flags>
+
+where <main> are the C++ source files and location of the header files for the main program and <flags> symbolizes additional compiler flags 
+(unrelated to TMDICE).
+The C++ compiler that is used needs to be able to compile code that follows the C++11 standard of the C++ programming language 
+(or also more recent standards). In the example for g++ above this is achieved by the compiler flag  -std=c++11. 
+
+3) Installation and execution instruction for the demo-code of TMDICE
 
 In this instruction of how to compile and run the demo-code, it is assumed that the user uses a LINUX based operating system 
 on which there is a g++ compiler of the GNU compiler collection installed that allows to compile at leas C++ code of the C++11 standard of the 
