@@ -1,46 +1,22 @@
 #include<fstream>
 #include<string>
 #include<iostream>
-#include "TMDICE.h"
+#include<iomanip>
+#include "vle.h"
 
-map<double,double> gausscdf;
-
-void fill_gausscdf(double sig)
-{
-	double anz=10000.;
-	double dx=1./anz;
-	double norm=0,normtmp=0;
-	for(double x=0;x<=1;x=x+dx)
-	{
-		norm=norm+dx*exp(-pow(1.-x,2)/(2.*sig*sig));
-	}
-	
-	for(double x=0;x<=1;x=x+dx)
-	{
-		normtmp=normtmp+dx*exp(-pow(1.-x,2)/(2.*sig*sig));
-		gausscdf[normtmp/norm]=x+dx;
-	}
-}
-
-double select_gausscdf()
-{
-	double r=rand01();
-	map<double,double>::iterator it=gausscdf.lower_bound(r);
-	return it->second;
-}
 
 int main(int argc, char **argv)
 {
-	string inputfile="inputfile";
+	string inputfile="inputfilevle";
 	readTMDICEparameters(inputfile);
 
-	double Nevents=pow(10,6);
-	setTMDICE();
-//fill_gausscdf(pow(10,-2));
-	
+	double Nevents=1*pow(10,6);
+	setVLE();
+
 	ofstream o;
 	o.open(argv[1]);
-	
+	//o<<"ind,x,xold,q,qold,kt12,th12,th12old,adr"<<endl;
+	//o<<"ind,typ,x,kt,th12,pt,eta,phi,adr"<<endl;
 //	o<<"Parameters"<<endl;
 	ifstream s;
 	s.open(inputfile.c_str());
@@ -62,18 +38,23 @@ int main(int argc, char **argv)
 //		cout<<i<<endl;
 		//if(100*i/Nevents==round(100*i/Nevents)){cout<<"\r\r"/*"\033[F"*/<<100*i/Nevents<<"% of events generated"<<endl;}
 		loadingbar(0,static_cast<double>(Nevents),static_cast<double>(i),Nevents);
-		TMDICEevent jet;
+		VLEevent jet(stop_non_resolved_but_resolvable,stop_non_resolved_but_resolvable);//(stop_when_td_exceeds_tmax_and_ktmin,stop_when_td_exceeds_tmax_and_ktmin,bias_tdtl);
 		
-		//double x0=select_gausscdf();
+//double x0=select_gausscdf();
 //		cout<<"x0="<<x0<<endl;
 		jet.setx1(1.0);
 		
-		jet.make_event();
+		jet.make_event();//2VLEinit();
+		//jet.initgen();
+		//jet.fillgen();
+		//jet.fillgen();
 		
+
 		for(int j=0;j<jet.genfin.size();j++)
 		{
 			if(jet.genfin.at(j).dump==false){o<<i<<" "<<jet.genfin.at(j).x<<" "<<jet.genfin.at(j).kt<<" "<<jet.genfin.at(j).phik<<" "<<jet.genfin.at(j).typ<<endl;}
 		}
+		
 	//	o<<"new event"<<endl;
 	}
 	o.close();

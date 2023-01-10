@@ -1,7 +1,7 @@
 #include<fstream>
 #include<string>
 #include<iostream>
-#include "TMDICE.h"
+#include "BDIM.h"
 
 map<double,double> gausscdf;
 
@@ -31,12 +31,12 @@ double select_gausscdf()
 
 int main(int argc, char **argv)
 {
-	string inputfile="inputfile";
+	string inputfile="inputfilebdim";
 	readTMDICEparameters(inputfile);
 
 	double Nevents=pow(10,6);
-	setTMDICE();
-//fill_gausscdf(pow(10,-2));
+	setBDIM();
+fill_gausscdf(pow(10,-2));
 	
 	ofstream o;
 	o.open(argv[1]);
@@ -54,15 +54,15 @@ int main(int argc, char **argv)
 /*	o<<endl<<"kt...momentum component transverse to jet-axis"<<endl;
 	o<<"phik...azimuthal angle of transverse momentum component"<<endl;
 	o<<"typ...1 for quarks, 2 for gluons"<<endl;
-	o<<endl;
-	o<<"Index for event"<<"	"<<"x"<<"	"<<"kt"<<"	"<<"phik"<<"	"<<"typ"<<endl;*/
+	o<<endl;*/
+	o<<"Index x kt phik typ"<<endl;
 	loadstart=false;
 	for(int i=0;i<Nevents;i++)
 	{
 //		cout<<i<<endl;
 		//if(100*i/Nevents==round(100*i/Nevents)){cout<<"\r\r"/*"\033[F"*/<<100*i/Nevents<<"% of events generated"<<endl;}
 		loadingbar(0,static_cast<double>(Nevents),static_cast<double>(i),Nevents);
-		TMDICEevent jet;
+		BDIMevent jet;
 		
 		//double x0=select_gausscdf();
 //		cout<<"x0="<<x0<<endl;
@@ -72,7 +72,8 @@ int main(int argc, char **argv)
 		
 		for(int j=0;j<jet.genfin.size();j++)
 		{
-			if(jet.genfin.at(j).dump==false){o<<i<<" "<<jet.genfin.at(j).x<<" "<<jet.genfin.at(j).kt<<" "<<jet.genfin.at(j).phik<<" "<<jet.genfin.at(j).typ<<endl;}
+			if(jet.genfin.at(j).dump==false /*and jet.genfin.at(j).islead==1*/)
+			{o<<i<<" "<<jet.genfin.at(j).x<<" "<<jet.genfin.at(j).kt<<" "<<jet.genfin.at(j).phik<<" "<<jet.genfin.at(j).typ<<endl;}
 		}
 	//	o<<"new event"<<endl;
 	}
