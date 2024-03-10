@@ -45,17 +45,10 @@ komplex:: ~komplex()
 
 int factorial(int nn)
 {
-//    cout<<nn<<endl;
     if(nn==1 or nn==0)
     {
-//        cout<<"i2"<<endl;
         return 1;
     }
- /*   if(nn>1)
-    {
-  //      cout<<"i3"<<endl;
-        return nn*factorial(nn-1);
-    }*/
     else
     {
         double s=1;
@@ -69,17 +62,11 @@ int factorial(int nn)
 
 double log_factorial(double nn)
 {
-//    cout<<nn<<endl;
     if(nn==1. or nn==0.)
     {
-//        cout<<"i2"<<endl;
         return 0;
     }
- /*   if(nn>1)
-    {
-  //      cout<<"i3"<<endl;
-        return nn*factorial(nn-1);
-    }*/
+
     else
     {
         double s=0;
@@ -125,11 +112,8 @@ double BesselJ_Re(double a, double r, double phi, int nmax)
     double s=0;
     for(double m=0.;m<nmax;m++)
     {
-  //      cout<<m<<" "<<A<<" "<<factorial(m)<<" "<<factorial(m+A)<<endl;
- //       s=s+pow(-1.,m)*pow(r/2.,2.*m+A)*cos((2.*m+A)*phi)/static_cast<double>(factorial(m)*factorial(m+A));
- s=s+pow(-1.,m)*exp((2.0*m+a)*log(r/2.0)-log_factorial2(m)-log_factorial2(m+a))*cos((2.*m+a)*phi);
+        s=s+pow(-1.,m)*exp((2.0*m+a)*log(r/2.0)-log_factorial2(m)-log_factorial2(m+a))*cos((2.*m+a)*phi);
     }
- //   cout<<"re"<<s<<endl;
     return s;
 }
 
@@ -139,11 +123,8 @@ double BesselJ_Im(double a, double r, double phi, int nmax)
     double s=0;
     for(int m=0;m<nmax;m++)
     {
- //       s=s+pow(-1.,m)*pow(r/2.,2.*m+A)*sin((2.*m+A)*phi)/static_cast<double>(factorial(m)*factorial(m+A));
-  s=s+pow(-1.,m)*exp((2.0*m+a)*log(r/2.0)-log_factorial2(m)-log_factorial2(m+a))*sin((2.*m+a)*phi);
-
+        s=s+pow(-1.,m)*exp((2.0*m+a)*log(r/2.0)-log_factorial2(m)-log_factorial2(m+a))*sin((2.*m+a)*phi);
     }
-   // cout<<"im"<<s<<endl;
     return s;
 }
 

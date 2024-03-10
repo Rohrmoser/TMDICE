@@ -5,10 +5,10 @@
 #include "functions_lib.h"
 #include"TMDICE_base.h"
 
+using namespace std;
 
 void setparams(map<string,double*> invars2)
 {	
-	//double scatflag1,ktsplitflag1,time_mode1;
 	for(map<string,double*>::iterator it=invars2.begin();it!=invars2.end();it++)
 	{
 		if(invars.find(it->first)!=invars.end())
@@ -23,14 +23,13 @@ void setparams(map<string,double*> invars2)
 	ktsplitflag=static_cast<int>(ktsplitflag1);
 	time_mode=static_cast<int>(time_mode1);
 }
-//TMDICEparticle class:
-TMDICEparticle::TMDICEparticle()
-{
-	
-}
 
+
+//TMDICEparticle class:
 double TMDICEparticle::omega()
 {
+	double x_old=old_part->x;
+
 	double z=x/x_old;
 	if(checkdla==1)
 	{
@@ -42,30 +41,17 @@ double TMDICEparticle::omega()
 	}	
 }
 
-double TMDICEparticle::eta()
-{
-	double p=sqrt(px*px+py*py+pz*pz);
-	return 0.5*log((p+pz)/(p-pz));
-}
-
-double TMDICEparticle::y()
-{
-	return 0.5*log((p0+pz)/(p0-pz));
-}
-
-double TMDICEparticle::phi()
-{
-	return atan2(py,px);
-}
-
-double TMDICEparticle::pt()
-{
-	return sqrt(px*px+py*py);
-}
 
 
+/**@brief branching angle
+
+ of the current particle with respect to its parent.
+*/
 double TMDICEparticle::th12()
 {
+	double x_old=old_part->x;
+	double Q_old=old_part->Q;
+
 	double z=x/x_old;
 
 	double thtmp=1.-(Q_old*Q_old)/(2.*x_old*emax*omega());
@@ -84,6 +70,10 @@ double TMDICEparticle::th12()
 	return thtmp;
 }
 
+/**@brief transverse momentum 
+
+of the current jet particle with respect to its parent.
+*/
 double TMDICEparticle:: kt12()
 {
 	double kttmp;
@@ -93,13 +83,15 @@ double TMDICEparticle:: kt12()
 	}
 	if(checkdla==1 or simplifythkt==1)
 	{
-		kttmp=omega()*th12();
+		kttmp=omega()*th_old;
 	}
 	return kttmp;
 }
 
 double TMDICEparticle:: tf()
 {
+	double x_old=old_part->x;
+	double Q_old=old_part->Q;
 	return (2.*emax*x_old/(Q_old*Q_old))/gevfm;
 }
 
@@ -109,197 +101,110 @@ double TMDICEparticle:: td()
 	return pow(12./(qhatgev*thold*thold),1./3.)/gevfm;
 }
 
-TMDICEparticle::~TMDICEparticle()
+void TMDICEbaseevent::stopparticle(TMDICEparticle *p,vector<TMDICEparticle*>& cur,vector<TMDICEparticle*>& fin)
 {
-
-}
-
-//TMDICEbaseevent class:
-TMDICEbaseevent::TMDICEbaseevent()
-{
-	
-}
-
-void TMDICEbaseevent::setEmax(double ee)
-{
-	emax=ee;
-}
-void TMDICEbaseevent::settmax(double tup)
-{
-	tmax=tup;
-}
-
-void TMDICEbaseevent::settmin(double tdown)
-{
-	tmin=tdown;
-}
-
-void TMDICEbaseevent::setx1(double x00)
-{
-	x0=x00;
-}
-
-void TMDICEbaseevent::setkt1(double kt00)
-{
-	kt0=kt00;
-}
-
-void TMDICEbaseevent::settyp1(double typ00)
-{
-	typ0=typ00;
-}
-
-void rotate4mom(TMDICEparticle &p, double theta, double phi)
-{
-	double pabs=sqrt(p.px*p.px+p.py*p.py+p.pz*p.pz);
-	p.px=pabs*sin(theta)*cos(phi);
-	p.px=pabs*sin(theta)*sin(phi);
-	p.px=pabs*cos(theta);
-}
-
-
-void TMDICEbaseevent::stopparticle(TMDICEparticle p, vector<TMDICEparticle>&newgen,vector<TMDICEparticle>&newgenfin)
-{
-	if(dumpcond(p)==false)
+	if(dumpcond(*p)==false)
 	{
-		p.dump=false;
-		if(stopcond(p)){ newgenfin.push_back(p);}
-		else{newgen.push_back(p);}
+		p->dump=false;
+		if(stopcond(*p)){ p->isfin=true;fin.push_back(p);}
+		else{cur.push_back(p);}
 
 	}
-	else{p.dump=true;setpval(p,evolmin); newgenfin.push_back(p);}
+	else{p->dump=true;setpval(*p,evolmin); p->isfin=true;if(dumpthedump ){p=NULL;}else{fin.push_back(p);}}
 }
 
-void  TMDICEbaseevent::fillgen()
+void  TMDICEbaseevent::fillgen(vector<TMDICEparticle*> &cur,vector<TMDICEparticle*>&fin)
 {
-	vector<TMDICEparticle> newgen,newgenfin,newgenfin2;
-	if(gen.size()>0)
+	if(cur.size()>0)
 	{
-		for( int j=0; j<gen.size(); j++)
+		vector<TMDICEparticle*>genptmp=cur;
+		cur.clear();
+		for( int j=0; j<genptmp.size(); j++)
 		{
-			TMDICEparticle p=gen.at(j);
-			
+			TMDICEparticle *p=genptmp.at(j);
 
 			TMDICEparticle p1,p2;
 			
-			vertex(p,p1,p2);
-			if(nosplitcond(p, p1,p2))
+			vertex(*p,p1,p2);
+			p->insert(p1);
+			p->insert(p2);
+			if(nosplitcond(*p, *(p->left),*(p->right) ) )
 			{
-				newgenfin2.push_back(p);
+				if(filltemps)
+				{
+					p->left->isfin=true;
+					fin.push_back(p->left);
+					p->right->istmp=true;
+				}
+				else
+				{
+					p->isfin=true;
+					fin.push_back(p);
+
+					delete p->left;
+					delete p->right;
+					p->left=NULL;
+					p->right=NULL;
+				}
 			}
 			else
 			{				
-				stopparticle(p1,newgen,newgenfin);
-				stopparticle(p2,newgen,newgenfin);	
+				stopparticle(p->left,cur,fin);
+				stopparticle(p->right,cur,fin);	
 			}		
 		}
 	}
-	gen=newgen;
-	genfin.insert(genfin.end(),newgenfin.begin(),newgenfin.end());
-	genfin.insert(genfin.end(),newgenfin2.begin(),newgenfin2.end());
-	casc.insert(casc.end(),gen.begin(),gen.end());
-	casc.insert(casc.end(),newgenfin.begin(),newgenfin.end());
 }
 
-
-void TMDICEbaseevent::initgen()
+void TMDICEbaseevent::initgen(TMDICEparticle &c,vector<TMDICEparticle*> &cur,vector<TMDICEparticle*>&fin)
 {
-	vector<TMDICEparticle>newgen;
-	TMDICEparticle p0;
-	p0.adr="1";
-	p0.x=x0;
-	p0.x_old=x0;
-
-	p0.typ=typ0;
-	p0.t_old=tmin;
-	p0.t=tmin;
-	//p0.Q=Q2max;
-	p0.Q=0;
+	cur.clear();
 	double varpi=pi;
-	p0.th_old=min(varpi,R);
-	p0.th_old_old=p0.th_old;
-	p0.Q_old=Q2max;
-	p0.ktrel=0;
-//	cout<<"hi"<<flush<<endl;
-	double qtmp=evol_select(p0);
-//	cout<<"hi again"<<endl;
-	setpval(p0,qtmp);
-	//missing: conversion Q to t
-	p0.kt=kt0;
-	p0.phik=0;
-	p0.islead=1;
 
-	/*p0.p0=p0.x*emax;
-	p0.pz=p0.kt;
-	p0.py=0.;
-	p0.px=sqrt(p0.p0*p0.p0-p0.kt*p0.kt-p0.Q*p0.Q);*/
+	fourmom tmpmom(0.,0.,0.,0.);
+	TMDICEparticle p0(x0,tmin,typ0,kt0,0.,0.,min(varpi,R),false,"1",false,false, true,tmpmom);
+	TMDICEparticle p00(x0,tmin,typ0,kt0,0.,Q2max,min(varpi,R),false,"0",false,false, true,tmpmom);
+	c=p00;
+	c.insert(p0);
 
+	TMDICEparticle * p0tmp=c.left;
+	double qtmp=evol_select(*p0tmp);
+	setpval(*p0tmp,qtmp);
+	p0tmp->p.p0=p0.x*emax;
+	double pp=sqrt(p0tmp->p.p0*p0tmp->p.p0-p0tmp->Q*p0tmp->Q)/p0tmp->p.p0;
+	
+	p0tmp->p.px=p1x*pp;
+	p0tmp->p.py=p1y*pp;
+	p0tmp->p.pz=p1z*pp;
 
-	p0.p0=p0.x*emax;
-
-	double pp=sqrt(p0.p0*p0.p0-p0.Q*p0.Q)/p0.p0;
-	p0.px=p1x*pp;
-	p0.py=p1y*pp;
-	p0.pz=p1z*pp;
-
-	p0.isfin=false;
-//	cout<<p0.p0<<" "<<p0.px<<" "<<p0.py<<" "<<p0.pz<<endl;
-
-
-	stopparticle(p0,newgen,genfin);
-	gen=newgen;
-	casc.insert(casc.end(),gen.begin(),gen.end());
-	casc.insert(casc.end(),genfin.begin(),genfin.end());
-//	cout<<"First particle selected"<<std::flush<<endl;
+	stopparticle(c.left,cur,fin);
 }
 
-void TMDICEbaseevent::make_event()
+
+void TMDICEbaseevent::make_event(TMDICEparticle &c,vector<TMDICEparticle*> &cur,vector<TMDICEparticle*>&fin)
 {
-	gen.clear();
-	genfin.clear();
-	casc.clear();
-	initgen();
-	while(gen.size()>0)
+	initgen(c,cur,fin);
+	while(cur.size()>0)
 	{
-		fillgen();
+		fillgen(cur,fin);
 	}
 }
-void TMDICEbaseevent::setevolmin(double minq)
+
+bool fincond(TMDICEparticle *p)
 {
-	evolmin=minq;
+    return (p->isfin)==true;
 }
 
-void TMDICEbaseevent::setsetpval(fktpartvoid tmpsetpval)
+bool tempcond(TMDICEparticle *p)
 {
-	setpval=tmpsetpval;
+    return (p->istmp)==true;
 }
-
-void TMDICEbaseevent::setstopcond(fktpartbool tmpstopcond)
-{
-	stopcond=tmpstopcond;
-}
-
-void TMDICEbaseevent::setnosplitcond(fktpartbool3 nosplitcondtmp)
-{
-	nosplitcond=nosplitcondtmp;
-}
-
-void TMDICEbaseevent::setdumpcond(fktpartbool tmpdumpcond)
-{
-	dumpcond=tmpdumpcond;
-}
-
-void TMDICEbaseevent::setselectionbias(fktpart selectionbiastmp)
-{
-	selectionbias=selectionbiastmp;
-}
-
-TMDICEbaseevent::~TMDICEbaseevent()
-{
-	
-}
-
 bool ptrue(TMDICEparticle p)
+{
+	return true;
+}
+
+bool ptrue(TMDICEparticle *p)
 {
 	return true;
 }
@@ -319,20 +224,19 @@ bool pfalse(TMDICEparticle p,TMDICEparticle p1,TMDICEparticle p2)
 	return false;
 }
 
-double no_bias(TMDICEparticle p)
+void determineadress(TMDICEparticle& p1, TMDICEparticle& p2)
 {
-	return -0.5;
-}
-
-int nodumpsize(vector<TMDICEparticle> jet)
-{
-	int j=0;
-	for(int i=0;i<jet.size();i++)
+	TMDICEparticle *p=p1.old_part;
+	if(p1.x>p2.x)
 	{
-		if(jet.at(i).dump==false)
-		{
-			j++;
-		}
+		p1.adr=p->adr+"1";
+		p2.adr=p->adr+"2";
+		p2.islead=0;
 	}
-	return j;
+	else
+	{
+		p2.adr=p->adr+"1";
+		p1.adr=p->adr+"2";
+		p1.islead=0;		
+	}
 }

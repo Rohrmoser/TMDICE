@@ -1,4 +1,5 @@
 #include "globalconsts.h"
+using namespace std;
 
 double gevfm;
 
@@ -12,12 +13,12 @@ double u_max;
 double u_anz;
 
 double colorfact,ca,cf;
-double tanz=1.5*pow(10,2);
+double tanz=4.*pow(10.,2.);
 int time_mode; //time_mode=0...infinite constant medium, 1...static medium of length tmax
 
 double tmin,tmax,taumin,taumax, qhat,qhatgev, emax, alphas, alphabar,nc, ndens, inittyp,W_scat, md,tstar,tstargev,Temp,x0,kt0,typ0; 
-double theta0orR,Q2max,xminvle,xepsvle, anzvle, Q2min,ao_mode,R,checkdla, vlemode,simplifythkt,setbias,rotate,p1x,p1y,p1z;
-double scatflag1,ktsplitflag1,time_mode1;
+double theta0orR,Q2max,xminvle,xepsvle, anzvle, Q2min,ao_mode,R,checkdla, vlemode,simplifythkt,setbias,rotate,p1x,p1y,p1z,bdimmode,vle2mode;
+double scatflag1,ktsplitflag1,time_mode1,dlla;
 
 int ktsplitflag, scatflag;
 

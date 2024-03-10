@@ -1,7 +1,5 @@
 #include "deps.h"
 
-
-
 #include "TMDICE_lib.h"
 #include "decor.h"
 #include "globalconsts.h"
@@ -12,10 +10,12 @@
 #define TMDICE
 
 void setTMDICE();
+void derivedvalues();
 
 class TMDICEevent : public TMDICEbaseevent
 {
 public:
+TMDICEevent(){};
 
 double evol_select(TMDICEparticle p);
 

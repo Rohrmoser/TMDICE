@@ -19,8 +19,6 @@ class komplex
     virtual ~komplex();
 };
 
-//const double gamma=0.57721 56649 01532 86060 65120 90082 40243 10421 59335 93992 35988 05767 23488 48677 26777 66467 09369 47063 29174 67495;
-
 int factorial(int n);
 
 double log_factorial(double nn);

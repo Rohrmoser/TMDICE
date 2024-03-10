@@ -1,5 +1,3 @@
-
-
 #include <cassert>
 #include <cmath>
 #include <cstdio>
@@ -23,5 +21,5 @@
 #include<vector>
 
 
-using namespace std;
+//using namespace std;
 

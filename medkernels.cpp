@@ -6,7 +6,7 @@
 
 #include"TMDICE_base.h"
 #include"BDIM.h"
-
+using namespace std;
 
 double kqq(double z){return 1*0.5*cf*(1.0+z*z)*pow(1.0-z,-1)*sqrt(z*ca+pow(1.0-z,2)*cf)/sqrt(z*(1.0-z));}
 double kqg(double z){double wert=1*N_F*T_R*(z*z+pow(1.0-z,2)) *sqrt(cf-z*(1.0-z)*ca)/sqrt(z*(1.0-z));return wert/(2.);}
@@ -15,10 +15,14 @@ double kgg(double z){double wert=pow(ca,1.5)*pow(1.0-z+z*z,2.5)*pow(z*(1.0-z),-1
 map<double,map<double,fkt>>K={{1.0, {{1.0,kqq},{2.0,kgq}}},{-1.0, {{-1.0,kqq},{2.0,kgq}}},{2.0, {{1.0,kqg},{2.0,kgg}}}};
 
 
-double kqq_stat(double z,double t){double kz=sqrt((z*ca+(1.0-z)*(1.0-z)*cf)/(z*(1-z))),tau=max(0.,(t)/(alphabar*tstar) ); return 1.000000*kqq(z)*max(0.,-sin(kz*tau)/cosh(kz*tau)+tanh(kz*tau))/(1.+cos(kz*tau)/cosh(kz*tau));}
-double kqg_stat(double z, double t){double kz=sqrt((cf-z*(1.-z)*ca)/(z*(1-z))),tau=max(0.,(t)/(alphabar*tstar) ); return 1.000000*kqg(z)*max(0.,-sin(kz*tau)/cosh(kz*tau)+tanh(kz*tau))/(1.+cos(kz*tau)/cosh(kz*tau));}
-double kgq_stat(double z,double t){double kz=sqrt(((1.-z)*ca+z*z*cf)/(z*(1-z))),tau=max(0.,(t)/(alphabar*tstar) ); return 1.000000*kgq(z)*max(0.,-sin(kz*tau)/cosh(kz*tau)+tanh(kz*tau))/(1.+cos(kz*tau)/cosh(kz*tau));}
-double kgg_stat(double z, double t){double kz=sqrt(/*ca*/(1-z+z*z)/(z*(1-z))),tau=max(0.,(/*ca*/t/*-tmin*/)/(/*alphabar*/tstar) ); return pow(ca,-1.5)*kgg(z)*max(0.,-sin(kz*tau)/cosh(kz*tau)+tanh(kz*tau))/(1.+cos(kz*tau)/cosh(kz*tau));}
+double kqq_stat(double z,double t){double kz=sqrt((z*ca+(1.0-z)*(1.0-z)*cf)/(z*(1-z))),tau=max(0.,(t)/(/*alphabar*/tstar) ); 
+return 1.000000*kqq(z)*max(0.,-sin(kz*tau)/cosh(kz*tau)+tanh(kz*tau))/(1.+cos(kz*tau)/cosh(kz*tau));}
+double kqg_stat(double z, double t){double kz=sqrt((cf-z*(1.-z)*ca)/(z*(1-z))),tau=max(0.,(t)/(/*alphabar*/tstar) ); 
+return 1.000000*kqg(z)*max(0.,-sin(kz*tau)/cosh(kz*tau)+tanh(kz*tau))/(1.+cos(kz*tau)/cosh(kz*tau));}
+double kgq_stat(double z,double t){double kz=sqrt(((1.-z)*ca+z*z*cf)/(z*(1-z))),tau=max(0.,(t)/(/*alphabar*/tstar) ); 
+return 1.000000*kgq(z)*max(0.,-sin(kz*tau)/cosh(kz*tau)+tanh(kz*tau))/(1.+cos(kz*tau)/cosh(kz*tau));}
+double kgg_stat(double z, double t){double kz=sqrt(ca*(1-z+z*z)/(z*(1-z))),tau=max(0.,(/*ca*/t/*-tmin*/)/(/*alphabar*/tstar) ); 
+ return /*pow(ca,-1.5)*/1*kgg(z)*max(0.,-sin(kz*tau)/cosh(kz*tau)+tanh(kz*tau))/(1.+cos(kz*tau)/cosh(kz*tau));}
 map<double,map<double,fkt2>>Kt_stat={{1.0, {{1.0,kqq_stat},{2.0,kgq_stat}}},{-1.0, {{-1.0,kqq_stat},{2.0,kgq_stat}}},{2.0, {{1.0,kqg_stat},{2.0,kgg_stat}}}};
 
 double kqq_exp(double z,double t){double kz=sqrt((z*ca+(1.0-z)*(1.0-z)*cf)/(z*(1-z))),tau=max(0.,(t)/(alphabar*tstar) ); return 1.000000*kqq(z)*max(0.,-sin(kz*tau)/cosh(kz*tau)+tanh(kz*tau))/(1.+cos(kz*tau)/cosh(kz*tau));}
@@ -61,6 +65,6 @@ map<double,map<double,map<double,double>>> phi_u_inv;
 map<double,map<double,double>> phi_u_max;
 
 double WW0(double R){return 0;}
-double WW1(double R){return qmin*qmin/(1.0-R);}//+
-double WW2(double R){return md*md/(pow(1.0+md*md/(qmin*qmin),1.0-R)-1.0);}//+
-double WW3(double R){return md*md/(pow(0.5*(1.0+md*md/(qmin*qmin) ),1.0-R)-1.0);}//+
+double WW1(double R){return qmin*qmin/(1.0-R);}
+double WW2(double R){return md*md/(pow(1.0+md*md/(qmin*qmin),1.0-R)-1.0);}
+double WW3(double R){return md*md/(pow(0.5*(1.0+md*md/(qmin*qmin) ),1.0-R)-1.0);}

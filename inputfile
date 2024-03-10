@@ -1,29 +1,37 @@
 nc 3 number of colors
-ndens .22	density of scatterers in [GeV^3]
-emax 200.0 light cone energy p_+ of initial jet particle in [GeV]
-qhat .796 average transverse momentum transfer in [GeV^2/fm] .29
+ndens 0.08 density of scatterers in [GeV^3]
+emax 100.0 light cone energy p_+ of initial jet particle in [GeV]
+qhat .29 average transverse momentum transfer in [GeV^2/fm]
 tmin .0 start time of jet evolution in [fm]
 tmax 5. end time of jet evolution in [fm]
 alphabar 0.1 coupling constant
-scat 1 type of scattering: 0 for no scattering, 1 for ~ q^(-4) potential, 2 and 3 for ~ 1/q^2(q^2+m_D^2) potential 2
+scat 0 type of scattering: 0 for no scattering, 1 for ~ q^(-4) potential, 2 and 3 for ~ 1/q^2(q^2+m_D^2) potential 
 ktsplit 0 collinear/non-collinear splitting: 0 for collinear, 1 for non-collinear splitting
 x1 1 momentum fraction of initial particle
 typ1 1. type of initial particle: 1 for quarks, 2 for gluons
 kt1 0 momentum component orthogonal to jet axis of initial particle in [GeV]
-xmin 0.01 cut-off for energy fraction x
-xeps 0.001 epsilon
+xmin 0.001 cut-off for energy fraction x
+xeps 0.0001 epsilon
 qmin 0.1 cut-off for transverse momentum in [GeV]
-md 0.854 Debye mass
-time_mode 0 time_mode=0...infinite constant medium, 1...static medium of length tmax, 2...exponentially decaying medium of length tmax
+md 0.61 Debye mass
+timemode 0 time_mode=0...infinite constant medium, 1...static medium of length tmax, 2...exponentially decaying medium of length tmax
 theta0orR 0
-Q2max 200.0
-Q2min 1.0
-ktmin 1.
-xminvle 0.01
-xepsvle 0.001
-ao_mode 1
-checkdla 0
-R 3.1415926
-vlemode 1
-rotate 0
+Q2max 100.0 Maximal virtuality of initial particle in the medium in [GeV]
+Q2min 0.1 minimal virtuality of jet-particles in the medium in [GeV]
+ktmin .5 minimal transverse momentum after splitting in [GeV]
+xminvle 0.01 cut-off for energy fraction x
+xepsvle 0.0001 epsilon
+ao_mode 0 set 1 for angular ordering in the vacuum
+checkdla 0 set 1 for checking the double log approximation (default 0)
+R 1. cone size
+simplifythkt 1
+setbias 0
+vlemode 1 set 1 for VLE in the medium at early stages
+vle2mode 1 set 1 for DGLAP evolution after leaving the medium
+bdimmode 1 set 1 for in medium evolution
+rotate 0 set 0 for eikonal approximation or 1 for releasing eikonal approximation
+p1x 0 momentum component of initial particle in x direction
+p1y 0 momentum component of initial particle in y direction
+p1z 100.0 momentum component of initial particle in z direction
+
 
