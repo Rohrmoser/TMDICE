@@ -1,76 +1,35 @@
-Instructions for the usage of the TMDICE program:
+The TMDICE program allows to simulate jets of strongly interacting particles that evolve in the QGP medium 
+undergoing processes of coherent medium induced emissions as well as scatterings off medium particles. 
+Furthermore the possibility that the jets first undergo processes of vacuum like emissions (VLEs) in the medium 
+was added.
 
-Table of Contents:
-1) Files contained in the TMDICE package and their brief description
-2) Brief guide to installation and usage of TMDICE
-3) Installation and execution instruction for the demo-code of TMDICE
+Requirements for usage:
 
-1) Files contained in the TMDICE package and their brief description
+In order to compile and run the entire code of this repository a Linux operating system with an installed 
+C++ compiler of the GNU-Compiler collection is required. This compiler is g++ for the C++ standard C++11 
+or higher. So far, other compilers have not been tested.
 
-The TMDICE package, once unzipped contains a single folder with all files of the program within that very folder.
-These files are:
-TMDICE.cpp ...the main file of the TMDICE program containing the functions for setting the parameters, calculating the partition functions, and 
-              performing the Monte-Carlo selection of the cascades
-TMDICE.h ...the corresponding header file, with description of the class "TMDICEevent"
-TMDICE_lib.cpp ...contains some routines necessary for calculating the partition functions and selection from these partition functions 
-                  in "TMDICE.cpp", as well as some physical constants.
-TMDICE_lib.h ...the corresponding header file
-TMDICE_lib.tpp ...contains a routine that allows numerical integration following the Gauss-Chebyshev method
-deps.h ...contains all the C++ libraries that need to be loaded in "TMDICE.cpp", and "TMDICE_lib.cpp"
-demo.cpp ...an example code that uses TMDICE to generate a set of parton cascades from an initial particle
-inputfile ...an input-file containing the parameters necessary to execute "demo.cpp"
-make_demo.sh ...Makefile for the program given by "demo.cpp"
-testfile ... some sample output obtained from a run of "demo.cpp"
-evaluation_demo.nb ...a Mathematica-file that produces plots from the outputs obtained by runs of "demo.cpp"
-readme ...this readme file
+Instructions for the usage:
 
-2) Brief guide to installation and usage of TMDICE
+In order to use the code in the present form for the generation of jets without underlying hard collisions, 
+download the files of this github-repository into a folder, which is referred to as <folder> from now on, 
+and grant permissions to execute the code file. Then, the code needs to be compiled via running the 
+following command within a terminal window:
 
-2.1) Installation
-In order to be able to execute the code or include it as a library into a C++ program this .zip file needs to be expanded (via unzip) into a folder, 
-which from now on will be referenced as $TMDICEfolder.
+<folder>/run.sh
 
-2.2) Usage
-In order to be able to compile C++ code that uses TMDICE, the following steps need to be done:
-To include TMDICE, into a C++ program it is necessary to include the line 
+After compilation, the program can be run via executing the following command within a terminal window:
+
+<folder>/a.out <file>
+
+where <file> is the location of the newly created output file.
+
+Both physical and numerical parameters can be changed in the file named "inputfile".
+
+In order to include TMDICE as a library in another C++ program add the following line at the beginning 
+of the program code:
 
 #include "TMDICE.h"
 
-at the beginning of the main file of the program,
-to compile the programs with reference to source files and location of the library files, which in the g++ compiler of the GNU-compiler collection
- will look like this:
- 
-g++ -std=c++11 <main> $TMDICEfolder/TMDICE.cpp $TMDICEfolder/TMDICE_lib.cpp -I$TMDICEfolder <flags>
-
-where <main> are the C++ source files and location of the header files for the main program and <flags> symbolizes additional compiler flags 
-(unrelated to TMDICE).
-The C++ compiler that is used needs to be able to compile code that follows the C++11 standard of the C++ programming language 
-(or also more recent standards). In the example for g++ above this is achieved by the compiler flag  -std=c++11. 
-
-3) Installation and execution instruction for the demo-code of TMDICE
-
-In this instruction of how to compile and run the demo-code, it is assumed that the user uses a LINUX based operating system 
-on which there is a g++ compiler of the GNU compiler collection installed that allows to compile at leas C++ code of the C++11 standard of the 
-language (or from a more recent standard of the C++ language).
-For other operating systems and compilers it cannot be guaranteed that the execution of this demo-code works.
-However, it should still be possible to compile and run programs that use TMDICE and compile and run the file demo.cpp, together 
-with the other TMDICE files, provided a C++ compiler that allows to compile C++ code written in the C++11 standard is installed 
-on the operating system. 
-
-To compile and run the demo code, replace in the following line <path> with the path to and <directory> with the name of a directory 
-in which the demo should be created and type the resulting line in a terminal window, then press enter:
-
-bash make_demo.sh <path>/<directory>
-
-With the same replacements as before type then also the following line in the terminal window and press enter:
-
-cd <path>/<directory> ; bash makefile.sh
-
-The code should now be successfully compiled.
-If the compilation did not work, verify that the installed version of the g++ compiler allows to compile C++ code written in the C++11 
-standard of the language.
-
-To run the successfully compiled demo-code, use again the same replacements as before on the following line 
-and in addition replace <outputfile> with a filename of your choice and type the resulting line in a terminal window, then press enter:
-
-<path>/<directory>/demo.out <outputfile>
+Also the other .cpp and .tpp files, with the exception of "runtmdice.cpp" need to be compiled together 
+with the project.
