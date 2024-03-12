@@ -1,6 +1,58 @@
+[Polska wersja. English version appended below]
+Pliki znajdujące się w tym repozytorium są wersją programu TMDICE zawierającą emisje próżniowe (VLE), 
+który powstał w wyniku badań finansowanych przez Narodowe Centrum Nauki (NCN) nr grantu:
+DEC-2021/05/X/ST2/01340
+
+Plik wyjściowy będący wynikiem wykonania programu dla przypadków VLE oraz promieniowania i rozpraszania 
+indukowanego przez medium (BDIM) został dodany jako plik „sampledata_VLE_BDIM.txt”. Dla porównania dodano 
+plik dla samego BDIM jako „sampledata_BDIM.txt”.
+
+Program TMDICE pozwala symulować strumienie silnie oddziałujących cząstek ewoluujących w ośrodku QGP, 
+przechodzących procesy emisji indukowanej przez ośrodek spójny oraz rozpraszania na cząstkach ośrodka.
+Ponadto dodano możliwość, że strumienie najpierw przechodzą procesy VLE w ośrodku.
+
+Wymagania dotyczące użytkowania:
+
+Do skompilowania i uruchomienia całego kodu tego repozytorium wymagany jest system operacyjny Linux z 
+zainstalowanym kompilatorem C++ z kolekcji GNU-Compiler. Ten kompilator to g++ dla standardu C++ C++11
+lub wyżej. Jak dotąd inne kompilatory nie zostały przetestowane.
+
+Instrukcje użytkowania:
+
+Aby wykorzystać kod w obecnej postaci do generowania strumieni bez twardych kolizji,pobierz pliki z 
+tego repozytorium github do folderu, który odtąd będzie nazywany <folder> i udziel uprawnień do wykonania 
+pliku kodu. Następnie kod należy skompilować, uruchamiając plik następujące polecenie w oknie terminala:
+
+<folder>/run.sh
+
+Po kompilacji program można uruchomić, wykonując w oknie terminala następującą komendę:
+
+<folder>/a.out <plik>
+
+gdzie <plik> jest lokalizacją nowo utworzonego pliku wyjściowego.
+
+W pliku o nazwie „inputfile” można zmieniać zarówno parametry fizyczne, jak i numeryczne.
+
+Aby włączyć TMDICE jako bibliotekę do innego programu C++, dodaj na początku następującą linię
+kodu programu:
+
+#include „TMDICE.h”
+
+Również inne pliki .cpp i .tpp, z wyjątkiem „runtmdice.cpp”, muszą zostać skompilowane razem
+z projektem.
+
+[English version]
+The files in this repository are a version of the TMDICE program that includes vacuum like emissions (VLEs),
+which was developed as a result of the research financed by Polish National Science Center (NCN) grant no.:
+DEC-2021/05/X/ST2/01340
+
+An Output-file as a result of executing the program for the case of VLEs and medium induced radiations and 
+scatterings (BDIM) has been added as file "sampledata_VLE_BDIM.txt". For comparison, a file for 
+BDIM alone has been added as "sampledata_BDIM.txt".
+
 The TMDICE program allows to simulate jets of strongly interacting particles that evolve in the QGP medium 
 undergoing processes of coherent medium induced emissions as well as scatterings off medium particles. 
-Furthermore the possibility that the jets first undergo processes of vacuum like emissions (VLEs) in the medium 
+Furthermore the possibility that the jets first undergo processes of VLEs in the medium 
 was added.
 
 Requirements for usage:
